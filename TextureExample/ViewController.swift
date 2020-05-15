@@ -78,12 +78,19 @@ class DragView: ASDisplayNode, UIGestureRecognizerDelegate {
             _beginDragLocation = draggedView.center
             _beginDragLocation = draggedView.convert(_beginDragLocation!, to: supernode!.supernode!.view)
             
-///         supernode!.supernode!.view.addSubview(draggedView) // Causes immeditate cancelled.
+//            supernode!.supernode!.view.addSubview(draggedView) // Causes immeditate cancelled.
+            
+            // The following does work(ish), however, it detaches the relaion between the CALayer and the UIView.
+            // So from that point, I cannot directly manipulate neither the view nor the layer (since the view reference is gone).
             supernode!.supernode!.layer.addSublayer(draggedView.layer)
-        case .possible: break
+            
+            // draggedView.center = _beginDragLocation! // not working
+            // self.style.layoutPosition = _beginDragLocation! // not working either
+            // self.setNeedsLayout()
+            // self.setNeedsDisplay()
         case .changed:
             let translation = panGesture.translation(in: self.supernode!.supernode!.view)
-            draggedView.center = CGPoint(x: _beginDragLocation!.x + translation.x, y: _beginDragLocation!.y + translation.y)
+//            draggedView.center = CGPoint(x: _beginDragLocation!.x + translation.x, y: _beginDragLocation!.y + translation.y) // when applited, it does cause the node to change position.
         case .cancelled:
             print("cancelled!")
         default:
