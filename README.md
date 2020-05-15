@@ -1,17 +1,16 @@
 # Drag issue with ASDisplayNode
 
 When adding a dragged node from a supernode to another, it causes the panGesture to be cancelled. 
-
-`
-    private func dragged(_ panGesture: UIPanGestureRecognizer) {
-        guard panGesture.view != nil else {return} // View here is wrapped in ASDisplayNode
-        switch panGesture.state {
-            case .began:
-                self.superview!.superview!.addSuperview(panGesture.view!)
-            case .cancelled:
-                print("Cancelled!") /// Fires, Why???
-        }
+```
+private func dragged(_ panGesture: UIPanGestureRecognizer) {
+    guard panGesture.view != nil else {return} // View here is wrapped in ASDisplayNode
+    switch panGesture.state {
+        case .began:
+            self.superview!.superview!.addSuperview(panGesture.view!)
+        case .cancelled:
+            print("Cancelled!") // Fires, Why???
     }
+}
 `
 
 However, this exact example works perfectly with `UIKit` default `UIView`s.
